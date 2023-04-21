@@ -58,14 +58,6 @@ export class ApplicationStore {
   };
 
   addListings = (authors: Array<authors>, books: Array<books>) => {
-    let prevAuthor: authors = {
-      id: -1,
-      idBook: -1,
-      firstName: '',
-      lastName: ''
-    }
-
-    let bookAuthors = [];
     let bookAuthorsTMP: Array<authors> = [];
 
     books.map((book: books) => {
@@ -88,4 +80,17 @@ export class ApplicationStore {
        bookAuthorsTMP = [];
     });
   };
+
+  addListing = (id: number, authors: authors[], title: string, pageCount: number, description: string, publishDate: string) => {
+    const listing: listing = {
+      id,
+      authors,
+      title,
+      pageCount,
+      description,
+      publishDate
+    };
+    this.listingList.push(listing);
+
+};
 }

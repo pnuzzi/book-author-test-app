@@ -48,7 +48,16 @@ export const AddBook = observer(function (props: Props) {
 
   const addBook = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(title, author, desc, date);
+    applicationStore.addListing(
+      Math.random(),
+      [{ id: 1, idBook: 1, firstName: author, lastName: author }],
+      title,
+      100,
+      desc,
+      date
+    );
+
+    console.log(applicationStore.listingList);
   };
 
   return (
