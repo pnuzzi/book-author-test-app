@@ -48,7 +48,7 @@ export const AddBook = observer(function (props: Props) {
 
   const addBook = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(title, author, date);
+    console.log(title, author, desc, date);
   };
 
   return (
