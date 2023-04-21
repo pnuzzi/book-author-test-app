@@ -5,11 +5,15 @@ import { Card } from "../../components/Card";
 
 import axios from "axios";
 import { Button } from "../../components/Button";
+import { AddBook } from "../../components/AddBook";
 
 interface Props {}
 
 export const Home = observer(function (props: Props) {
   const { applicationStore } = React.useContext(AppContext);
+
+  const [addAuthors, setAddAuthors] = React.useState([]);
+  const [addBooks, setAddBooks] = React.useState([]);
 
   React.useEffect(() => {
     axios
@@ -40,7 +44,10 @@ export const Home = observer(function (props: Props) {
         // handle error
         console.log(error);
       })
-      
+      .finally(() => {
+        setAddAuthors(applicationStore.authorList);
+      });
+
     axios
       .get(`https://fakerestapi.azurewebsites.net/api/v1/Books`)
       .then(function (response) {
@@ -53,7 +60,7 @@ export const Home = observer(function (props: Props) {
               title: string;
               pageCount: number;
               description: string;
-              publishDate: Date;
+              publishDate: string;
             },
             index: number
           ) => {
@@ -68,12 +75,14 @@ export const Home = observer(function (props: Props) {
         );
       })
       .catch(function (error) {})
-
-    applicationStore.addListings(
-      applicationStore.authorList,
-      applicationStore.bookList
-    );
+      .finally(() => {
+        setAddBooks(applicationStore.bookList);
+      });
   }, []);
+
+  React.useEffect(() => {
+    applicationStore.addListings(addAuthors, addBooks);
+  }, [addAuthors, addBooks]);
 
   const [first20, setFirst20] = React.useState(0);
   const [last20, setLast20] = React.useState(20);
@@ -84,22 +93,36 @@ export const Home = observer(function (props: Props) {
     }
   };
   const add20 = (): void => {
-    setFirst20(first20 + 20);
-    setLast20(last20 + 20);
+    if (last20 < addBooks.length) {
+      setFirst20(first20 + 20);
+      setLast20(last20 + 20);
+    }
+  };
+
+  const findDate = (date: string): React.ReactNode => {
+    const newDate = new Date(date);
+
+    const year = newDate.getUTCFullYear();
+    const month = newDate.getUTCMonth() + 1;
+    const day = newDate.getUTCDate();
+    const dateString = `${month}/${day}/${year}`;
+
+    return <p>{dateString}</p>;
   };
 
   return (
     <>
+      <AddBook />
       <Button onClick={sub20}>Previous 20</Button>
       <Button onClick={add20}>Next 20</Button>
       {applicationStore.listingList
         .slice(first20, last20)
         .map((listing, index) => {
           return (
-            <Card key={listing.id}>
+            <Card key={`${listing.id} ${listing.publishDate} ${listing.title}`}>
               <div>
                 <h2>{listing.title}</h2>
-                <p>{listing.publishDate.toString()}</p>
+                {findDate(listing.publishDate)}
                 {listing.authors.map((author) => (
                   <h4>
                     {author.firstName} {author.lastName}

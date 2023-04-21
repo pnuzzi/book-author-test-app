@@ -12,7 +12,7 @@ interface books {
   title: string;
   pageCount: number;
   description: string;
-  publishDate: Date;
+  publishDate: string;
 }
 
 interface listing {
@@ -21,7 +21,7 @@ interface listing {
   title: string;
   description: string;
   pageCount: number;
-  publishDate: Date;
+  publishDate: string;
 }
 
 export class ApplicationStore {
@@ -35,20 +35,24 @@ export class ApplicationStore {
   }
 
   setAuthors = (id: number, idBook: number, firstName: string, lastName: string) => {
-    const author: authors = {id,
+    const author: authors = {
+      id,
       idBook,
       firstName,
-      lastName};
+      lastName
+    };
     
     this.authorList.push(author);
   };
 
-  setBook = (id: number, title: string, pageCount: number, description: string, publishDate: Date) => {
-    const book: books = {id,
+  setBook = (id: number, title: string, pageCount: number, description: string, publishDate: string) => {  
+    const book: books = {
+      id,
       title,
       pageCount,
       description,
-    publishDate};
+      publishDate
+    };
     
     this.bookList.push(book);
   };
@@ -70,6 +74,7 @@ export class ApplicationStore {
           bookAuthorsTMP = [...bookAuthorsTMP, {id: author.id, idBook: author.idBook, firstName: author.firstName, lastName: author.lastName}]
         }
       });
+      
        const listing: listing = {
         id: book.id,
         authors: bookAuthorsTMP,
