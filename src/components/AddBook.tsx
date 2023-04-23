@@ -18,6 +18,12 @@ const Form = styled.form`
   }
 `;
 
+const ErrorMessage = styled.p`
+  color: red;
+  background-color: yellow;
+  max-width: 400px;
+`;
+
 interface Props {}
 
 export const AddBook = observer(function (props: Props) {
@@ -28,6 +34,7 @@ export const AddBook = observer(function (props: Props) {
   const [authorLast, setAuthorLast] = React.useState("");
   const [desc, setDesc] = React.useState("");
   const [date, setDate] = React.useState("");
+  const [showError, setShowError] = React.useState(false);
 
   const onChangeInputs = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -52,16 +59,26 @@ export const AddBook = observer(function (props: Props) {
 
   const addBook = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    applicationStore.addListing(
-      Math.random(),
-      [{ id: 1, idBook: 1, firstName: authorFirst, lastName: authorLast }],
-      title,
-      100,
-      desc,
-      date
-    );
 
-    console.log(applicationStore.listingList);
+    if (
+      title === "" ||
+      authorFirst === "" ||
+      authorLast === "" ||
+      desc === "" ||
+      date === ""
+    ) {
+      setShowError(true);
+    } else {
+      applicationStore.addListing(
+        Math.random(),
+        [{ id: 1, idBook: 1, firstName: authorFirst, lastName: authorLast }],
+        title,
+        100,
+        desc,
+        date
+      );
+      setShowError(false);
+    }
   };
 
   return (
@@ -80,6 +97,9 @@ export const AddBook = observer(function (props: Props) {
         <input type="date" name="date" onChange={onChangeInputs} />
         <button type="submit">Add Book</button>
       </Form>
+      {showError ? (
+        <ErrorMessage>Add all fields to the form</ErrorMessage>
+      ) : null}
     </div>
   );
 });
