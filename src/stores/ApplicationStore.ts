@@ -90,7 +90,7 @@ export class ApplicationStore {
       description,
       publishDate
     };
-    this.listingList.push(listing);
+    this.listingList.unshift(listing);
 
 };
 }

@@ -6,6 +6,7 @@ import { Card } from "../../components/Card";
 import axios from "axios";
 import { Button } from "../../components/Button";
 import { AddBook } from "../../components/AddBook";
+import { ApplicationStore } from "../../stores";
 
 interface Props {}
 
@@ -93,7 +94,7 @@ export const Home = observer(function (props: Props) {
     }
   };
   const add20 = (): void => {
-    if (last20 < addBooks.length) {
+    if (first20 < addBooks.length) {
       setFirst20(first20 + 20);
       setLast20(last20 + 20);
     }

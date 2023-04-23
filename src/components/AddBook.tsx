@@ -24,7 +24,8 @@ export const AddBook = observer(function (props: Props) {
   const { applicationStore } = React.useContext(AppContext);
 
   const [title, setTitle] = React.useState("");
-  const [author, setAuthor] = React.useState("");
+  const [authorFirst, setAuthorFirst] = React.useState("");
+  const [authorLast, setAuthorLast] = React.useState("");
   const [desc, setDesc] = React.useState("");
   const [date, setDate] = React.useState("");
 
@@ -32,7 +33,10 @@ export const AddBook = observer(function (props: Props) {
     e.preventDefault();
 
     if (e.currentTarget.name === "title") setTitle(e.currentTarget.value);
-    if (e.currentTarget.name === "author") setAuthor(e.currentTarget.value);
+    if (e.currentTarget.name === "authorFirst")
+      setAuthorFirst(e.currentTarget.value);
+    if (e.currentTarget.name === "authorLast")
+      setAuthorLast(e.currentTarget.value);
     if (e.currentTarget.name === "desc") setDesc(e.currentTarget.value);
     if (e.currentTarget.name === "date") {
       const newDate = new Date(e.currentTarget.value.toString());
@@ -50,7 +54,7 @@ export const AddBook = observer(function (props: Props) {
     e.preventDefault();
     applicationStore.addListing(
       Math.random(),
-      [{ id: 1, idBook: 1, firstName: author, lastName: author }],
+      [{ id: 1, idBook: 1, firstName: authorFirst, lastName: authorLast }],
       title,
       100,
       desc,
@@ -66,8 +70,10 @@ export const AddBook = observer(function (props: Props) {
       <Form onSubmit={addBook}>
         <label htmlFor="title">Title</label>
         <input type="text" name="title" onChange={onChangeInputs} />
-        <label htmlFor="author">Author</label>
-        <input type="text" name="author" onChange={onChangeInputs} />
+        <label htmlFor="author">Author First Name</label>
+        <input type="text" name="authorFirst" onChange={onChangeInputs} />
+        <label htmlFor="author">Author Last Name</label>
+        <input type="text" name="authorLast" onChange={onChangeInputs} />
         <label htmlFor="desc">Description</label>
         <input type="text" name="desc" onChange={onChangeInputs} />
         <label htmlFor="date">Date</label>
