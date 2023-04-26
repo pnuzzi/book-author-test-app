@@ -17,72 +17,16 @@ export const Home = observer(function (props: Props) {
   const [addBooks, setAddBooks] = React.useState([]);
 
   React.useEffect(() => {
-    axios
-      .get("https://fakerestapi.azurewebsites.net/api/v1/Authors")
-      .then(function (response) {
-        // handle success
-
-        response.data.map(
-          (
-            item: {
-              id: number;
-              idBook: number;
-              firstName: string;
-              lastName: string;
-            },
-            index: number
-          ) => {
-            applicationStore.setAuthors(
-              item.id,
-              item.idBook,
-              item.firstName,
-              item.lastName
-            );
-          }
-        );
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(() => {
-        setAddAuthors(applicationStore.authorList);
-      });
-
-    axios
-      .get(`https://fakerestapi.azurewebsites.net/api/v1/Books`)
-      .then(function (response) {
-        // handle success
-
-        response.data.map(
-          (
-            item: {
-              id: number;
-              title: string;
-              pageCount: number;
-              description: string;
-              publishDate: string;
-            },
-            index: number
-          ) => {
-            applicationStore.setBook(
-              item.id,
-              item.title,
-              item.pageCount,
-              item.description,
-              item.publishDate
-            );
-          }
-        );
-      })
-      .catch(function (error) {})
-      .finally(() => {
-        setAddBooks(applicationStore.bookList);
-      });
+    applicationStore.getAuthors();
+    applicationStore.getBooks();
+    console.log("INSIDE APPLICATION STORE USE EFFECT");
   }, []);
 
   React.useEffect(() => {
+    setAddAuthors(applicationStore.authorList);
+    setAddBooks(applicationStore.bookList);
     applicationStore.addListings(addAuthors, addBooks);
+    console.log("INSIDE ADD LISTINGS USE EFFECT");
   }, [addAuthors, addBooks]);
 
   const [first20, setFirst20] = React.useState(0);

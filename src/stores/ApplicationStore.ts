@@ -1,13 +1,15 @@
 import { makeAutoObservable } from "mobx";
 
-interface authors {
+import BookAuthorAPI from "../service/BookAuthorAPI";
+
+interface IAuthor {
   id: number;
   idBook: number;
   firstName: string;
   lastName: string;
 }
 
-interface books {
+interface IBook {
   id: number;
   title: string;
   pageCount: number;
@@ -15,9 +17,9 @@ interface books {
   publishDate: string;
 }
 
-interface listing {
+interface IListing {
   id: number;
-  authors: authors[];
+  authors: IAuthor[];
   title: string;
   description: string;
   pageCount: number;
@@ -25,72 +27,142 @@ interface listing {
 }
 
 export class ApplicationStore {
-  
-  authorList: Array<authors> = [];
-  bookList: Array<books> = [];
-  listingList: Array<listing> = [];
+  authorList: Array<IAuthor> = [];
+  bookList: Array<IBook> = [];
+  listingList: Array<IListing> = [];
+
+  getAuthorData: Array<object> = [];
+  getBookData: Array<object> = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  setAuthors = (id: number, idBook: number, firstName: string, lastName: string) => {
-    const author: authors = {
+  getAuthors = async () => {
+    const getAuthorData = await BookAuthorAPI.getAuthors();
+
+    getAuthorData.map(
+      (
+        item: {
+          id: number;
+          idBook: number;
+          firstName: string;
+          lastName: string;
+        },
+        index: number
+      ) => {
+        this.setAuthors(item.id, item.idBook, item.firstName, item.lastName);
+      }
+    );
+  };
+
+  getBooks = async () => {
+    const getBookData = await BookAuthorAPI.getBooks();
+
+    getBookData.map(
+      (
+        item: {
+          id: number;
+          title: string;
+          pageCount: number;
+          description: string;
+          publishDate: string;
+        },
+        index: number
+      ) => {
+        this.setBook(
+          item.id,
+          item.title,
+          item.pageCount,
+          item.description,
+          item.publishDate
+        );
+      }
+    );
+  };
+
+  setAuthors = (
+    id: number,
+    idBook: number,
+    firstName: string,
+    lastName: string
+  ) => {
+    const author: IAuthor = {
       id,
       idBook,
       firstName,
-      lastName
+      lastName,
     };
-    
+
     this.authorList.push(author);
   };
 
-  setBook = (id: number, title: string, pageCount: number, description: string, publishDate: string) => {  
-    const book: books = {
+  setBook = (
+    id: number,
+    title: string,
+    pageCount: number,
+    description: string,
+    publishDate: string
+  ) => {
+    const book: IBook = {
       id,
       title,
       pageCount,
       description,
-      publishDate
+      publishDate,
     };
-    
+
     this.bookList.push(book);
   };
 
-  addListings = (authors: Array<authors>, books: Array<books>) => {
-    let bookAuthorsTMP: Array<authors> = [];
+  addListings = (authors: Array<IAuthor>, books: Array<IBook>) => {
+    let bookAuthorsTMP: Array<IAuthor> = [];
 
-    books.map((book: books) => {
-      authors.map((author: authors) => {
-        if(author.idBook === book.id) {
-          bookAuthorsTMP = [...bookAuthorsTMP, {id: author.id, idBook: author.idBook, firstName: author.firstName, lastName: author.lastName}]
+    books.map((book: IBook) => {
+      authors.map((author: IAuthor) => {
+        if (author.idBook === book.id) {
+          bookAuthorsTMP = [
+            ...bookAuthorsTMP,
+            {
+              id: author.id,
+              idBook: author.idBook,
+              firstName: author.firstName,
+              lastName: author.lastName,
+            },
+          ];
         }
       });
-      
-       const listing: listing = {
+
+      const listing: IListing = {
         id: book.id,
         authors: bookAuthorsTMP,
         title: book.title,
         pageCount: book.pageCount,
         description: book.description,
-        publishDate: book.publishDate
-       };
+        publishDate: book.publishDate,
+      };
 
-       this.listingList.push(listing);
-       bookAuthorsTMP = [];
+      this.listingList.push(listing);
+      bookAuthorsTMP = [];
     });
   };
 
-  addListing = (id: number, authors: authors[], title: string, pageCount: number, description: string, publishDate: string) => {
-    const listing: listing = {
+  addListing = (
+    id: number,
+    authors: IAuthor[],
+    title: string,
+    pageCount: number,
+    description: string,
+    publishDate: string
+  ) => {
+    const listing: IListing = {
       id,
       authors,
       title,
       pageCount,
       description,
-      publishDate
+      publishDate,
     };
     this.listingList.unshift(listing);
-
-};
+  };
 }
