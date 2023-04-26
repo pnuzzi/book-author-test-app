@@ -27,12 +27,12 @@ interface IListing {
 }
 
 export class ApplicationStore {
-  authorList: Array<IAuthor> = [];
-  bookList: Array<IBook> = [];
-  listingList: Array<IListing> = [];
+  authorList: IAuthor[] = [];
+  bookList: IBook[] = [];
+  listingList: IListing[] = [];
 
-  getAuthorData: Array<object> = [];
-  getBookData: Array<object> = [];
+  getAuthorData: object[] = [];
+  getBookData: object[] = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -115,8 +115,8 @@ export class ApplicationStore {
     this.bookList.push(book);
   };
 
-  addListings = (authors: Array<IAuthor>, books: Array<IBook>) => {
-    let bookAuthorsTMP: Array<IAuthor> = [];
+  addListings = (authors: IAuthor[], books: IBook[]) => {
+    let bookAuthorsTMP: IAuthor[] = [];
 
     books.map((book: IBook) => {
       authors.map((author: IAuthor) => {
