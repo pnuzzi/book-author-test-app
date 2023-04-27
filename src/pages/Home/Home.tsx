@@ -13,9 +13,6 @@ interface Props {}
 export const Home = observer(function (props: Props) {
   const { applicationStore } = React.useContext(AppContext);
 
-  const [addAuthors, setAddAuthors] = React.useState([]);
-  const [addBooks, setAddBooks] = React.useState([]);
-
   React.useEffect(() => {
     applicationStore.getBooksAuthors();
   }, []);
@@ -29,7 +26,7 @@ export const Home = observer(function (props: Props) {
     }
   };
   const add20 = (): void => {
-    if (first20 < applicationStore.listingList.length) {
+    if (first20 < applicationStore.listingList.length - 20) {
       setFirst20(first20 + 20);
       setLast20(last20 + 20);
     }
