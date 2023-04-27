@@ -19,8 +19,10 @@ const Form = styled.form`
 `;
 
 const ErrorMessage = styled.p`
-  color: red;
-  background-color: yellow;
+  padding: 10px;
+  color: #ffc312;
+  background-color: #ea2027;
+  tex-align: center;
   max-width: 400px;
 `;
 
@@ -98,7 +100,7 @@ export const AddBook = observer(function (props: Props) {
         <button type="submit">Add Book</button>
       </Form>
       {showError ? (
-        <ErrorMessage>Add all fields to the form</ErrorMessage>
+        <ErrorMessage>ADD ALL FIELDS TO THE FORM</ErrorMessage>
       ) : null}
     </div>
   );
