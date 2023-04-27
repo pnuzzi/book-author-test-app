@@ -17,17 +17,8 @@ export const Home = observer(function (props: Props) {
   const [addBooks, setAddBooks] = React.useState([]);
 
   React.useEffect(() => {
-    applicationStore.getAuthors();
-    applicationStore.getBooks();
-    console.log("INSIDE APPLICATION STORE USE EFFECT");
+    applicationStore.getBooksAuthors();
   }, []);
-
-  React.useEffect(() => {
-    setAddAuthors(applicationStore.authorList);
-    setAddBooks(applicationStore.bookList);
-    applicationStore.addListings(addAuthors, addBooks);
-    console.log("INSIDE ADD LISTINGS USE EFFECT");
-  }, [addAuthors, addBooks]);
 
   const [first20, setFirst20] = React.useState(0);
   const [last20, setLast20] = React.useState(20);
@@ -38,7 +29,7 @@ export const Home = observer(function (props: Props) {
     }
   };
   const add20 = (): void => {
-    if (first20 < addBooks.length) {
+    if (first20 < applicationStore.listingList.length) {
       setFirst20(first20 + 20);
       setLast20(last20 + 20);
     }

@@ -38,8 +38,9 @@ export class ApplicationStore {
     makeAutoObservable(this);
   }
 
-  getAuthors = async () => {
+  getBooksAuthors = async () => {
     const getAuthorData = await BookAuthorAPI.getAuthors();
+    const getBookData = await BookAuthorAPI.getBooks();
 
     getAuthorData.map(
       (
@@ -54,10 +55,6 @@ export class ApplicationStore {
         this.setAuthors(item.id, item.idBook, item.firstName, item.lastName);
       }
     );
-  };
-
-  getBooks = async () => {
-    const getBookData = await BookAuthorAPI.getBooks();
 
     getBookData.map(
       (
@@ -79,6 +76,8 @@ export class ApplicationStore {
         );
       }
     );
+
+    this.addListings(this.authorList, this.bookList);
   };
 
   setAuthors = (
