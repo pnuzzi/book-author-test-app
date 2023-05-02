@@ -1,12 +1,11 @@
 import { observer } from "mobx-react";
 import * as React from "react";
+import { Link } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { Card } from "../../components/Card";
 
-import axios from "axios";
 import { Button } from "../../components/Button";
 import { AddBook } from "../../components/AddBook";
-import { ApplicationStore } from "../../stores";
 
 interface Props {}
 
@@ -52,18 +51,30 @@ export const Home = observer(function (props: Props) {
         .slice(first20, last20)
         .map((listing, index) => {
           return (
-            <Card key={`${listing.id} ${listing.publishDate} ${listing.title}`}>
-              <div>
-                <h2>{listing.title}</h2>
-                {findDate(listing.publishDate)}
-                {listing.authors.map((author) => (
-                  <h4>
-                    {author.firstName} {author.lastName}
-                  </h4>
-                ))}
-                <p>{listing.description}</p>
-              </div>
-            </Card>
+            <Link
+              to={`/listing/${listing.id}`}
+              key={`${listing.id} ${listing.publishDate} ${listing.title}`}
+              state={{
+                title: listing.title,
+                authors: listing.authors,
+                description: listing.description,
+                publishDate: listing.publishDate,
+                id: listing.id,
+              }}
+            >
+              <Card>
+                <div>
+                  <h2>{listing.title}</h2>
+                  {findDate(listing.publishDate)}
+                  {listing.authors.map((author) => (
+                    <h4 key={author.id}>
+                      {author.firstName} {author.lastName}
+                    </h4>
+                  ))}
+                  <p>{listing.description}</p>
+                </div>
+              </Card>
+            </Link>
           );
         })}
     </>
