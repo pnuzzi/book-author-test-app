@@ -4,11 +4,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Card } from "./components/Card";
 import { Listing } from "./pages/Home/Listing";
 import { Error404 } from "./pages/Home/404_Error";
+import { ApplicationStore } from "./stores";
+
+const appStore = ApplicationStore.getInstance();
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Home props={{ appStore }} />,
     children: [],
     errorElement: null,
   },

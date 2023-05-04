@@ -38,6 +38,15 @@ export class ApplicationStore {
     makeAutoObservable(this);
   }
 
+  private static instance: ApplicationStore;
+
+  static getInstance(): ApplicationStore {
+    if (!ApplicationStore.instance) {
+      ApplicationStore.instance = new ApplicationStore();
+    }
+    return ApplicationStore.instance;
+  }
+
   getBooksAuthors = async () => {
     const getAuthorData = await BookAuthorAPI.getAuthors();
     const getBookData = await BookAuthorAPI.getBooks();

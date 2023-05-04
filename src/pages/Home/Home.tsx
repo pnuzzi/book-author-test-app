@@ -3,17 +3,21 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../AppContext";
 import { Card } from "../../components/Card";
-
+import { ApplicationStore } from "../../stores/ApplicationStore";
 import { Button } from "../../components/Button";
 import { AddBook } from "../../components/AddBook";
 
-interface Props {}
+interface Props {
+  appStore: ApplicationStore;
+}
 
 export const Home = observer(function (props: Props) {
-  const { applicationStore } = React.useContext(AppContext);
+  // const { applicationStore } = React.useContext(AppContext);
+
+  const appStore = ApplicationStore.getInstance();
 
   React.useEffect(() => {
-    applicationStore.getBooksAuthors();
+    appStore.getBooksAuthors();
   }, []);
 
   const [first20, setFirst20] = React.useState(0);
@@ -25,7 +29,7 @@ export const Home = observer(function (props: Props) {
     }
   };
   const add20 = (): void => {
-    if (first20 < applicationStore.listingList.length - 20) {
+    if (first20 < appStore.listingList.length - 20) {
       setFirst20(first20 + 20);
       setLast20(last20 + 20);
     }
@@ -47,36 +51,34 @@ export const Home = observer(function (props: Props) {
       <AddBook />
       <Button onClick={sub20}>Previous 20</Button>
       <Button onClick={add20}>Next 20</Button>
-      {applicationStore.listingList
-        .slice(first20, last20)
-        .map((listing, index) => {
-          return (
-            <Link
-              to={`/listing/${listing.id}`}
-              key={`${listing.id} ${listing.publishDate} ${listing.title}`}
-              state={{
-                title: listing.title,
-                authors: listing.authors,
-                description: listing.description,
-                publishDate: listing.publishDate,
-                id: listing.id,
-              }}
-            >
-              <Card>
-                <div>
-                  <h2>{listing.title}</h2>
-                  {findDate(listing.publishDate)}
-                  {listing.authors.map((author) => (
-                    <h4 key={author.id}>
-                      {author.firstName} {author.lastName}
-                    </h4>
-                  ))}
-                  <p>{listing.description}</p>
-                </div>
-              </Card>
-            </Link>
-          );
-        })}
+      {appStore.listingList.slice(first20, last20).map((listing, index) => {
+        return (
+          <Link
+            to={`/listing/${listing.id}`}
+            key={`${listing.id} ${listing.publishDate} ${listing.title}`}
+            state={{
+              title: listing.title,
+              authors: listing.authors,
+              description: listing.description,
+              publishDate: listing.publishDate,
+              id: listing.id,
+            }}
+          >
+            <Card>
+              <div>
+                <h2>{listing.title}</h2>
+                {findDate(listing.publishDate)}
+                {listing.authors.map((author) => (
+                  <h4 key={author.id}>
+                    {author.firstName} {author.lastName}
+                  </h4>
+                ))}
+                <p>{listing.description}</p>
+              </div>
+            </Card>
+          </Link>
+        );
+      })}
     </>
   );
 });
