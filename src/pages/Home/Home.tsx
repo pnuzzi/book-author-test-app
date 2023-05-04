@@ -11,10 +11,10 @@ interface Props {
   appStore: ApplicationStore;
 }
 
-export const Home = observer(function (props: Props) {
+export const Home = observer(function ({ appStore }: Props) {
   // const { applicationStore } = React.useContext(AppContext);
 
-  const appStore = ApplicationStore.getInstance();
+  // const appStore = ApplicationStore.getInstance();
 
   React.useEffect(() => {
     appStore.getBooksAuthors();

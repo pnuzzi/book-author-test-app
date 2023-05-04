@@ -5,16 +5,18 @@ import { ApplicationStore } from "../../stores/ApplicationStore";
 import styled from "styled-components";
 import { useLocation, useParams } from "react-router-dom";
 
-interface Props {}
+interface Props {
+  appStore: ApplicationStore;
+}
 
-export const Listing = observer(function (props: Props) {
+export const Listing = observer(function ({ appStore }: Props) {
   const { id } = useParams();
 
   // const listing = applicationStore.listingList.find(
   //   (l) => l.id.toString() === id
   // );
 
-  const appStore = ApplicationStore.getInstance();
+  // const appStore = ApplicationStore.getInstance();
 
   console.log(appStore);
 

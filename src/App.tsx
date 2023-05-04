@@ -11,13 +11,13 @@ const appStore = ApplicationStore.getInstance();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home props={{ appStore }} />,
+    element: <Home appStore={appStore} />,
     children: [],
     errorElement: null,
   },
   {
     path: "/listing/:id",
-    element: <Listing />,
+    element: <Listing appStore={appStore} />,
     children: [],
     errorElement: null,
   },
