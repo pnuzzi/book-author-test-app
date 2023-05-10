@@ -3,6 +3,7 @@ import * as React from "react";
 import { AppContext } from "../AppContext";
 
 import styled from "styled-components";
+import { ApplicationStore } from "../stores";
 
 const Form = styled.form`
   display: flex;
@@ -26,11 +27,11 @@ const ErrorMessage = styled.p`
   max-width: 400px;
 `;
 
-interface Props {}
+interface Props {
+  appStore: ApplicationStore;
+}
 
-export const AddBook = observer(function (props: Props) {
-  const { applicationStore } = React.useContext(AppContext);
-
+export const AddBook = observer(function ({ appStore }: Props) {
   const [title, setTitle] = React.useState("");
   const [authorFirst, setAuthorFirst] = React.useState("");
   const [authorLast, setAuthorLast] = React.useState("");
@@ -49,7 +50,6 @@ export const AddBook = observer(function (props: Props) {
     if (e.currentTarget.name === "desc") setDesc(e.currentTarget.value);
     if (e.currentTarget.name === "date") {
       const newDate = new Date(e.currentTarget.value.toString());
-      console.log(newDate);
 
       const year = newDate.getUTCFullYear();
       const month = newDate.getUTCMonth() + 1;
@@ -71,9 +71,16 @@ export const AddBook = observer(function (props: Props) {
     ) {
       setShowError(true);
     } else {
-      applicationStore.addListing(
+      appStore.addListing(
         Math.random(),
-        [{ id: 1, idBook: 1, firstName: authorFirst, lastName: authorLast }],
+        [
+          {
+            id: Math.random(),
+            idBook: Math.random(),
+            firstName: authorFirst,
+            lastName: authorLast,
+          },
+        ],
         title,
         100,
         desc,

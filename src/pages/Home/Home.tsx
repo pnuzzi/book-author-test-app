@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { AppContext } from "../../AppContext";
 import { Card } from "../../components/Card";
 import { ApplicationStore } from "../../stores/ApplicationStore";
 import { Button } from "../../components/Button";
@@ -12,10 +11,6 @@ interface Props {
 }
 
 export const Home = observer(function ({ appStore }: Props) {
-  // const { applicationStore } = React.useContext(AppContext);
-
-  // const appStore = ApplicationStore.getInstance();
-
   React.useEffect(() => {
     appStore.getBooksAuthors();
   }, []);
@@ -48,22 +43,12 @@ export const Home = observer(function ({ appStore }: Props) {
 
   return (
     <>
-      <AddBook />
+      <AddBook appStore={appStore} />
       <Button onClick={sub20}>Previous 20</Button>
       <Button onClick={add20}>Next 20</Button>
       {appStore.listingList.slice(first20, last20).map((listing, index) => {
         return (
-          <Link
-            to={`/listing/${listing.id}`}
-            key={`${listing.id} ${listing.publishDate} ${listing.title}`}
-            state={{
-              title: listing.title,
-              authors: listing.authors,
-              description: listing.description,
-              publishDate: listing.publishDate,
-              id: listing.id,
-            }}
-          >
+          <Link to={`/listing/${listing.id}`} key={listing.id}>
             <Card>
               <div>
                 <h2>{listing.title}</h2>
