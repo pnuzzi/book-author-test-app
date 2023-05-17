@@ -1,9 +1,28 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import { ApplicationStore } from "../../stores/ApplicationStore";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import styled from "styled-components";
+import { Header } from "../../components/Header";
+import { Button } from "../../components/Button";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 20px 0;
+  max-width: 500px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #000;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  word-break: break-all;
+`;
 
 const EditDiv = styled.div`
   display: flex;
@@ -25,6 +44,22 @@ const EditDiv = styled.div`
     :active {
       background-color: black;
     }
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  input {
+    margin-bottom: 10px;
+    width: 300px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid #000;
+  }
+
+  p {
+    width: 100%;
   }
 `;
 
@@ -69,11 +104,17 @@ export const Listing = observer(function ({ appStore }: Props) {
 
   return (
     <>
-      <button onClick={deleteListing}>Delete</button>
+      <Header>
+        <h1>Book Listings Test App</h1>
+        <p>This app uses a fake books and authors api from fakerestapi.</p>
+      </Header>
+      <Link to={"/"}>
+        <Button>Back to Home</Button>
+      </Link>
       {removeListing ? (
-        <div>
+        <Wrapper>
           {listing && (
-            <div>
+            <Container>
               <EditDiv>
                 <button onClick={() => setToggleTitle(!toggleTitle)}>⚙️</button>
                 {toggleTitle ? (
@@ -87,6 +128,7 @@ export const Listing = observer(function ({ appStore }: Props) {
                   />
                 )}
               </EditDiv>
+              <hr />
               {listing.authors.map((author: any) => (
                 <h4 key={author.id}>
                   {author.firstName} {author.lastName}
@@ -110,10 +152,13 @@ export const Listing = observer(function ({ appStore }: Props) {
                   />
                 )}
               </EditDiv>
-            </div>
+            </Container>
           )}
-        </div>
-      ) : null}
+          <Button onClick={deleteListing}>Delete</Button>
+        </Wrapper>
+      ) : (
+        <h1>Listing Deleted</h1>
+      )}
     </>
   );
 });

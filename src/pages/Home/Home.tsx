@@ -57,7 +57,6 @@ export const Home = observer(function ({ appStore }: Props) {
         <h1>Book Listings Test App</h1>
         <p>This app uses a fake books and authors api from fakerestapi.</p>
       </Header>
-
       <Main>
         <AddBook appStore={appStore} />
         <Pagination>
@@ -67,8 +66,8 @@ export const Home = observer(function ({ appStore }: Props) {
 
         {appStore.listingList.slice(first20, last20).map((listing, index) => {
           return (
-            <Card>
-              <Link to={`/listing/${listing.id}`} key={listing.id}>
+            <Card key={listing.id}>
+              <Link to={`/listing/${listing.id}`}>
                 <div>
                   <h2>{listing.title}</h2>
                   {findDate(listing.publishDate)}
