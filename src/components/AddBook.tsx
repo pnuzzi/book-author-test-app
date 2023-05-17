@@ -4,18 +4,32 @@ import { AppContext } from "../AppContext";
 
 import styled from "styled-components";
 import { ApplicationStore } from "../stores";
+import { Button } from "./Button";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 20px 0;
+  max-width: 500px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #000;
+`;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  max-width: 400px;
+  align-items: center;
+  width: 100%;
 
   input {
     margin-bottom: 10px;
-  }
-
-  button {
-    margin-bottom: 20px;
+    width: 300px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid #000;
   }
 `;
 
@@ -38,6 +52,7 @@ export const AddBook = observer(function ({ appStore }: Props) {
   const [desc, setDesc] = React.useState("");
   const [date, setDate] = React.useState("");
   const [showError, setShowError] = React.useState(false);
+  const [toggleAddBookForm, setToggleAddBookForm] = React.useState(false);
 
   const onChangeInputs = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -91,24 +106,31 @@ export const AddBook = observer(function ({ appStore }: Props) {
   };
 
   return (
-    <div>
-      <h3>Add Book</h3>
-      <Form onSubmit={addBook}>
-        <label htmlFor="title">Title</label>
-        <input type="text" name="title" onChange={onChangeInputs} />
-        <label htmlFor="author">Author First Name</label>
-        <input type="text" name="authorFirst" onChange={onChangeInputs} />
-        <label htmlFor="author">Author Last Name</label>
-        <input type="text" name="authorLast" onChange={onChangeInputs} />
-        <label htmlFor="desc">Description</label>
-        <input type="text" name="desc" onChange={onChangeInputs} />
-        <label htmlFor="date">Date</label>
-        <input type="date" name="date" onChange={onChangeInputs} />
-        <button type="submit">Add Book</button>
-      </Form>
-      {showError ? (
-        <ErrorMessage>ADD ALL FIELDS TO THE FORM</ErrorMessage>
+    <>
+      <Button onClick={() => setToggleAddBookForm(!toggleAddBookForm)}>
+        Show/Hide Add Book Form
+      </Button>
+      {toggleAddBookForm ? (
+        <Wrapper>
+          <h3>Add Book</h3>
+          <Form onSubmit={addBook}>
+            <label htmlFor="title">Title</label>
+            <input type="text" name="title" onChange={onChangeInputs} />
+            <label htmlFor="author">Author First Name</label>
+            <input type="text" name="authorFirst" onChange={onChangeInputs} />
+            <label htmlFor="author">Author Last Name</label>
+            <input type="text" name="authorLast" onChange={onChangeInputs} />
+            <label htmlFor="desc">Description</label>
+            <input type="text" name="desc" onChange={onChangeInputs} />
+            <label htmlFor="date">Date</label>
+            <input type="date" name="date" onChange={onChangeInputs} />
+            <Button type="submit">Add Book</Button>
+          </Form>
+          {showError ? (
+            <ErrorMessage>ADD ALL FIELDS TO THE FORM</ErrorMessage>
+          ) : null}
+        </Wrapper>
       ) : null}
-    </div>
+    </>
   );
 });
